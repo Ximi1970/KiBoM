@@ -9,6 +9,8 @@ class ColumnList:
     COL_PART = 'Part'
     COL_PART_LIB = 'Part Lib'
     COL_DATASHEET = 'Datasheet'
+    COL_SKU = 'SKU'
+    COL_MPN = 'MPN'
 
     #default columns for groups
     COL_GRP_QUANTITY = 'Quantity Per PCB'

@@ -36,6 +36,9 @@ def WriteBoM(filename, groups, net, headings = columns.ColumnList._COLUMNS_DEFAU
     #remove any headings that appear in the ignore[] list
     headings = [h for h in headings if not h.lower() in [i.lower() for i in prefs.ignore]]
 
+    #remove any headings that appear in the merge[] list
+    headings = [h for h in headings if not h.lower() in [i.lower() for i in prefs.merge]]
+
     #if no extension is given, assume .csv (and append!)
     if len(filename.split('.')) < 2:
         filename += ".csv"
