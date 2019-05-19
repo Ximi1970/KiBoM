@@ -45,11 +45,10 @@ def WriteCSV(filename, groups, net, headings, prefs):
                 writer.writerow(["Component"] + headings)
             else:
                 writer.writerow(headings)
-
+        
         merge = None
-        if len(prefs.merge) > 1:
-            if prefs.merge in headings:
-                merge = headings.index("/".join(prefs.merge))
+        if (len(prefs.merge) > 1) and ("/".join(prefs.merge) in headings):
+            merge = headings.index("/".join(prefs.merge))
 
         count = 0
         rowCount = 1
@@ -58,12 +57,11 @@ def WriteCSV(filename, groups, net, headings, prefs):
             if prefs.ignoreDNF and not group.isFitted(): continue
 
             field = None
-            if len(prefs.merge) > 1:
-                if prefs.merge in headings:
-                    for i in prefs.merge:
-                        field = group.getField(i)
-                        if field:
-                            break
+            if (len(prefs.merge) > 1) and merge:
+                for i in prefs.merge:
+                    field = group.getField(i)
+                    if field:
+                        break
 
             row = group.getRow(headings)
 
