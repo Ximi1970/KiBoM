@@ -458,7 +458,7 @@ class ComponentGroup():
                 refs = self.getRefs(),
                 name = field,
                 flds = self.fields[field],
-                fld = fieldData))
+                fld = fieldData.encode('utf-8')))
             self.fields[field] += " " + fieldData
 
     def updateFields(self, usealt=False, wrapN=None):
