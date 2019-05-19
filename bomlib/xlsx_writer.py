@@ -49,13 +49,27 @@ else:
             if not prefs.hideHeaders:
                 worksheet.write_string( 0, i, row_headings[i], cellformats[i])
 
+        merge = None
+        if len(prefs.merge) > 1:
+            merge = headings.index("/".join(prefs.merge))
+
         count = 0
         rowCount = 1
 
         for i, group in enumerate(groups):
             if prefs.ignoreDNF and not group.isFitted(): continue
 
+            field = None
+            if len(prefs.merge) > 1:
+                for i in prefs.merge:
+                    field = group.getField(i)
+                    if field:
+                        break
+
             row = group.getRow(headings)
+
+            if field:
+                row[merge] = field
 
             if prefs.numberRows:
                 row = [str(rowCount)] + row
@@ -76,7 +90,7 @@ else:
                 
             rowCount += 1
 
-        if not prefs.hideHeaders:
+        if not prefs.hideFooters:
             #blank rows
             for i in range(5):
                 rowCount += 1

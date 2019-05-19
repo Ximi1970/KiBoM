@@ -46,13 +46,27 @@ def WriteCSV(filename, groups, net, headings, prefs):
             else:
                 writer.writerow(headings)
 
+        merge = None
+        if len(prefs.merge) > 1:
+            merge = headings.index("/".join(prefs.merge))
+
         count = 0
         rowCount = 1
 
         for i, group in enumerate(groups):
             if prefs.ignoreDNF and not group.isFitted(): continue
 
+            field = None
+            if len(prefs.merge) > 1:
+                for i in prefs.merge:
+                    field = group.getField(i)
+                    if field:
+                        break
+
             row = group.getRow(headings)
+
+            if field:
+                row[merge] = field
 
             if prefs.numberRows:
                 row = [str(rowCount)] + row
@@ -68,7 +82,7 @@ def WriteCSV(filename, groups, net, headings, prefs):
 
             rowCount += 1
 
-        if not prefs.hideHeaders:
+        if not prefs.hideFooters:
             #blank rows
             for i in range(5):
                 writer.writerow([])

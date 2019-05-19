@@ -95,13 +95,27 @@ def WriteHTML(filename, groups, net, headings, prefs):
                         bg = ' bgcolor="{c}"'.format(c=bg) if bg else ''))
         html.write("</tr>\n")
 
+        merge = None
+        if len(prefs.merge) > 1:
+            merge = headings.index("/".join(prefs.merge))
+
         rowCount = 0
 
         for i,group in enumerate(groups):
 
             if prefs.ignoreDNF and not group.isFitted(): continue
 
+            field = None
+            if len(prefs.merge) > 1:
+                for i in prefs.merge:
+                    field = group.getField(i)
+                    if field:
+                        break
+
             row = group.getRow(headings)
+
+            if field:
+                row[merge] = field
 
             rowCount += 1
 

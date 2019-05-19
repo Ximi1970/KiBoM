@@ -11,6 +11,7 @@ from bomlib.columns import ColumnList
 class BomPref:
 
     SECTION_IGNORE = "IGNORE_COLUMNS"
+    SECTION_MERGE = "MERGE_COLUMNS"
     SECTION_COLUMN_ORDER = "COLUMN_ORDER"
     SECTION_GENERAL = "BOM_OPTIONS"
     SECTION_ALIASES = "COMPONENT_ALIASES"
@@ -30,6 +31,8 @@ class BomPref:
     OPT_INCLUDE_VERSION = "include_version_number"
     OPT_DEFAULT_BOARDS = "number_boards"
     OPT_DEFAULT_PCBCONFIG = "board_variant"
+    OPT_HIDEHEADERS = "hideheaders"
+    OPT_HIDEFOOTERS = "hidefooters"
 
     OPT_CONFIG_FIELD = "fit_field"
 
@@ -39,6 +42,10 @@ class BomPref:
             ColumnList.COL_PART_LIB,
             ColumnList.COL_FP_LIB,
             ] #list of headings to ignore in BoM generation
+        self.merge = [
+            ColumnList.COL_SKU,
+            ColumnList.COL_MPN,
+            ] #list of headings to merge in BoM generation
         self.corder = ColumnList._COLUMNS_DEFAULT
         self.useAlt = False #use alternate reference representation
         self.altWrap = None #wrap to n items when using alt representation
@@ -131,6 +138,8 @@ class BomPref:
                 self.useRegex = self.checkOption(cf, self.OPT_USE_REGEX, default=True)
                 self.mergeBlankFields = self.checkOption(cf, self.OPT_MERGE_BLANK, default=True)
                 self.includeVersionNumber = self.checkOption(cf, self.OPT_INCLUDE_VERSION, default=True)
+                self.hideHeaders = self.checkOption(cf, self.OPT_HIDEHEADERS, default=False)
+                self.hideFooters = self.checkOption(cf, self.OPT_HIDEFOOTERS, default=False)
 
             if cf.has_option(self.SECTION_GENERAL, self.OPT_CONFIG_FIELD):
                 self.configField = cf.get(self.SECTION_GENERAL, self.OPT_CONFIG_FIELD)
@@ -153,6 +162,10 @@ class BomPref:
             # Read out ignored-rows
             if self.SECTION_IGNORE in cf.sections():
                 self.ignore = [i for i in cf.options(self.SECTION_IGNORE)]
+
+            # Read out merge-columns
+            if self.SECTION_MERGE in cf.sections():
+                self.merge = [i for i in cf.options(self.SECTION_MERGE)]
 
             # Read out column order
             if self.SECTION_COLUMN_ORDER in cf.sections():
@@ -212,12 +225,25 @@ class BomPref:
         cf.set(self.SECTION_GENERAL, '; Default PCB variant if none given on CLI with -r')
         cf.set(self.SECTION_GENERAL, self.OPT_DEFAULT_PCBCONFIG, self.pcbConfig)
 
+        cf.set(self.SECTION_GENERAL, '; Hide the headers')
+        cf.set(self.SECTION_GENERAL, self.OPT_HIDEHEADERS, self.pcbConfig)
+
+        cf.set(self.SECTION_GENERAL, '; Hide the footers')
+        cf.set(self.SECTION_GENERAL, self.OPT_HIDEFOOTERS, self.pcbConfig)
+
         cf.add_section(self.SECTION_IGNORE)
         cf.set(self.SECTION_IGNORE, "; Any column heading that appears here will be excluded from the Generated BoM")
         cf.set(self.SECTION_IGNORE, "; Titles are case-insensitive")
 
         for i in self.ignore:
             cf.set(self.SECTION_IGNORE, i)
+
+        cf.add_section(self.SECTION_MERGE)
+        cf.set(self.SECTION_MERGE, "; Any column heading that appears here will be merged into one column in the Generated BoM")
+        cf.set(self.SECTION_MERGE, "; Titles are case-insensitive")
+
+        for i in self.merge:
+            cf.set(self.SECTION_MERGE, i)
 
         cf.add_section(self.SECTION_COLUMN_ORDER)
         cf.set(self.SECTION_COLUMN_ORDER, "; Columns will apear in the order they are listed here")
