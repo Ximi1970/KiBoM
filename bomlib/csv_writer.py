@@ -48,7 +48,8 @@ def WriteCSV(filename, groups, net, headings, prefs):
 
         merge = None
         if len(prefs.merge) > 1:
-            merge = headings.index("/".join(prefs.merge))
+            if prefs.merge in headings:
+                merge = headings.index("/".join(prefs.merge))
 
         count = 0
         rowCount = 1
@@ -58,10 +59,11 @@ def WriteCSV(filename, groups, net, headings, prefs):
 
             field = None
             if len(prefs.merge) > 1:
-                for i in prefs.merge:
-                    field = group.getField(i)
-                    if field:
-                        break
+                if prefs.merge in headings:
+                    for i in prefs.merge:
+                        field = group.getField(i)
+                        if field:
+                            break
 
             row = group.getRow(headings)
 
