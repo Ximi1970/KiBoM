@@ -73,7 +73,7 @@ def WriteBoM(filename, groups, net, headings = columns.ColumnList._COLUMNS_DEFAU
         else:
             print("Error writing XML output")
 
-    elif ext in ["xlsx"]:
+    elif ( ext in ["xlsx"] ) and prefs.xlsxwriter_available:
         if WriteXLSX(filename, groups, net, headings, prefs):
             print("XLSX Output -> {fn}".format(fn=filename))
             result = True
