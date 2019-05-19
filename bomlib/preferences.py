@@ -52,6 +52,7 @@ class BomPref:
         self.boards = 1 # Quantity of boards to be made
         self.mergeBlankFields = True  # Blanks fields will be merged when possible
         self.hideHeaders = False
+        self.hideFooters = False
         self.verbose = False  # By default, is not verbose
         self.configField = "Config"  # Default field used for part fitting config
         self.pcbConfig = "default"
