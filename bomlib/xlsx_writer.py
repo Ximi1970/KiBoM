@@ -90,7 +90,7 @@ else:
                 
             rowCount += 1
 
-        if not prefs.hideHeaders:
+        if not prefs.hideFooters:
             #blank rows
             for i in range(5):
                 rowCount += 1
