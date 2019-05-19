@@ -241,6 +241,8 @@ class BomPref:
 
         cf.add_section(self.SECTION_MERGE)
         cf.set(self.SECTION_MERGE, "; Any column heading that appears here will be merged into one column in the Generated BoM")
+        cf.set(self.SECTION_MERGE, "; New column header is: <heading1>/<heading2>[/<heading3]")
+        cf.set(self.SECTION_MERGE, "; The first non empty value will be placed in the new column")
         cf.set(self.SECTION_MERGE, "; Titles are case-insensitive")
 
         for i in self.merge:
